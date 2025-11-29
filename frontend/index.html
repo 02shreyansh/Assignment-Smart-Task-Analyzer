@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smart Task Analyzer</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Smart Task Analyzer</h1>
+            <p>Intelligently prioritize your tasks based on urgency, importance, effort, and dependencies</p>
+        </div>
+
+        <div class="main-grid">
+            <div class="panel">
+                <h2>Input Tasks</h2>
+                
+                <div class="tabs">
+                    <button class="tab active" onclick="switchTab('manual')">Manual Entry</button>
+                    <button class="tab" onclick="switchTab('bulk')">Bulk JSON</button>
+                </div>
+                <div id="manual-tab" class="tab-content active">
+                    <form id="task-form">
+                        <div class="form-group">
+                            <label>Task Title *</label>
+                            <input type="text" id="task-title" required placeholder="e.g., Fix login bug">
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Due Date *</label>
+                                <input type="date" id="task-due-date" required>
+                            </div>
+                            <div class="form-group">
+                                <label>Estimated Hours *</label>
+                                <input type="number" id="task-hours" min="0.1" step="0.5" required placeholder="2.5">
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Importance (1-10) *</label>
+                                <input type="number" id="task-importance" min="1" max="10" required placeholder="8">
+                            </div>
+                            <div class="form-group">
+                                <label>Dependencies (Task IDs)</label>
+                                <input type="text" id="task-dependencies" placeholder="1, 2, 3">
+                            </div>
+                        </div>
+
+                        <div class="button-group">
+                            <button type="submit" class="button button-primary">Add Task</button>
+                            <button type="button" class="button button-secondary" onclick="clearTaskList()">Clear All</button>
+                        </div>
+                    </form>
+
+                    <div id="task-list" style="margin-top: 20px;"></div>
+                </div>
+                <div id="bulk-tab" class="tab-content">
+                    <div class="form-group">
+                        <label>Paste JSON Array of Tasks</label>
+                        <textarea id="bulk-json" placeholder='[
+  {
+    "id": 1,
+    "title": "Fix login bug",
+    "due_date": "2025-11-30",
+    "estimated_hours": 3,
+    "importance": 8,
+    "dependencies": []
+  }
+]'></textarea>
+                    </div>
+                    <button class="button button-primary" onclick="loadBulkTasks()">Load Tasks</button>
+                </div>
+                <div class="strategy-selector">
+                    <label>Sorting Strategy</label>
+                    <div class="strategy-options">
+                        <div class="strategy-option active" data-strategy="smart_balance">
+                            <div class="title">Smart Balance</div>
+                            <div class="desc">Balanced approach</div>
+                        </div>
+                        <div class="strategy-option" data-strategy="fastest_wins">
+                            <div class="title">Fastest Wins</div>
+                            <div class="desc">Quick completions</div>
+                        </div>
+                        <div class="strategy-option" data-strategy="high_impact">
+                            <div class="title">High Impact</div>
+                            <div class="desc">Maximum importance</div>
+                        </div>
+                        <div class="strategy-option" data-strategy="deadline_driven">
+                            <div class="title">Deadline Driven</div>
+                            <div class="desc">Urgent first</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="button-group">
+                    <button class="button button-primary" onclick="analyzeTasks()" id="analyze-btn">
+                        Analyze Tasks
+                    </button>
+                    <button class="button button-secondary" onclick="getSuggestions()" id="suggest-btn">
+                        Get Top 3 Suggestions
+                    </button>
+                </div>
+            </div>
+            <div class="panel">
+                <h2>Results</h2>
+                <div id="results-container" class="results-container">
+                    <div class="empty-state">
+                        <div class="empty-state-icon"></div>
+                        <p>No results yet. Add tasks and click "Analyze Tasks" to get started!</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="suggestions-panel" style="display: none;"></div>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
